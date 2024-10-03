@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "junior-data-transformation-and-analysis-evaluation"
+version = "1.0.0"
+authors = [
+    {name = "fulll", email = "developer@fulll.fr"},
+]
+description = "Data Engineer Junior: data transformation and analysis evaluation"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Private",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+  "numpy==2.1.1"
+  "pandas==2.2.3"
+  "inquirer"="3.4.0"
+]
