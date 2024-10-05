@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import inquirer
 import time, os, calendar
-import calendar
 
 current_directory = os.getcwd()
 
@@ -22,6 +21,17 @@ DTYPES = {
 }
 VALID_GENDERS = ["Male", "Female"]
 VALID_USER_TYPES = ["Subscriber", "Customer"]
+
+def time_execution(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print("\nThis took %s seconds." % (time.time() - start_time))
+        print("-" * 40)
+        return result
+    return wrapper
 
 def get_filters() -> tuple:
     """
@@ -89,7 +99,7 @@ def load_data(city: str, month: str, day: str) -> pd.DataFrame:
 
     return df
 
-
+@time_execution
 def time_stats(df: pd.DataFrame) -> dict:
     """Displays statistics on the most frequent times of travel."""
 
@@ -128,12 +138,9 @@ def time_stats(df: pd.DataFrame) -> dict:
         results["mostCommonStartHour"] = []
     print("The most common start hour(s) is/are: ", results["mostCommonStartHour"])
 
-    print("\nThis took %s seconds." % (time.time() - start_time))
-    print("-" * 40)
-
     return results
 
-
+@time_execution
 def station_stats(df: pd.DataFrame) -> None:
     """Displays statistics on the most popular stations and trip."""
 
@@ -162,11 +169,9 @@ def station_stats(df: pd.DataFrame) -> None:
         results["mostCommonTrip"] = (df['Start Station'] + " -> " + df['End Station']).mode().to_list()
         print("The most common trip is: ", results["mostCommonTrip"])
 
-    print("\nThis took %s seconds." % (time.time() - start_time))
-    print("-" * 40)
-
     return results
 
+@time_execution
 def trip_duration_stats(df: pd.DataFrame) -> None:
     """Displays statistics on the total and average trip duration."""
 
@@ -180,7 +185,7 @@ def trip_duration_stats(df: pd.DataFrame) -> None:
 
     df['Trip Duration'] = pd.to_numeric(df['Trip Duration'], errors='coerce')
     df['Trip Duration'] = df['Trip Duration'].dropna()
-    df['Trip Duration'] = df[df['Trip Duration'] > 0]
+    df['Trip Duration'] = df[df['Trip Duration'] > 0]['Trip Duration']
 
     # TO DO: Display total travel time
     results['totalTravelTime'] = df['Trip Duration'].sum()
@@ -190,12 +195,9 @@ def trip_duration_stats(df: pd.DataFrame) -> None:
     results['averageTravelTime'] = df['Trip Duration'].mean()
     print("The mean travel time is: ", f"~{round(results['averageTravelTime'] / 60, 2)} mins")
 
-    print("\nThis took %s seconds." % (time.time() - start_time))
-    print("-" * 40)
-    
     return results
 
-
+@time_execution
 def user_stats(df: pd.DataFrame) -> None:
     """Displays statistics on bikeshare users."""
 
@@ -225,9 +227,6 @@ def user_stats(df: pd.DataFrame) -> None:
         print("The earliest year of birth is: ", results['earliestYearOfBirth'])
     else:
         results['earliestYearOfBirth'] = None
-
-    print("\nThis took %s seconds." % (time.time() - start_time))
-    print("-" * 40)
 
     return results
 
